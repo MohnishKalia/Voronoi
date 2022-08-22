@@ -11,6 +11,10 @@ const COLORS = [
     "772014",
     "3f220f",
     "19180a",
+    "2e2d20",
+    "414034",
+    "525146",
+    "626157",
 ];
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -27,8 +31,6 @@ for (let y = 0; y < HEIGHT; y++) {
     }
     pixels.push(arr);
 }
-
-
 
 /**
  * @typedef {{x: number, y:number}} Vec2
