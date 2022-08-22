@@ -75,7 +75,7 @@ function colorToPixel(hexString) {
 async function seedSetup() {
     const seedInput = await rl.question('How many seeds for the Voronoi diagram? ');
     const seedCount = parseInt(seedInput.trim());
-    if (isNaN(seedCount)) throw new Error("Invalid seed input: exiting...");
+    if (isNaN(seedCount) || seedCount < 1) throw new Error("Invalid seed input: exiting...");
     rl.close();
 
     for (let i = 0; i < seedCount; i++) {
@@ -86,30 +86,29 @@ async function seedSetup() {
 function colorDiagram() {
     for (let y = 0; y < HEIGHT; y++) {
         for (let x = 0; x < WIDTH; x++) {
-            let closestSeedIndex = 0;
-            let closestSeedD2 = Number.MAX_SAFE_INTEGER;
+            const closestSeed = seeds
+                .map((s, index) => ({
+                    d2: dist2(x, y, s.x, s.y),
+                    index,
+                }))
+                .sort((a, b) => a.d2 - b.d2)
+                .shift();
 
-            for (let i = 0; i < seeds.length; i++) {
-                const curSeed = seeds[i];
-                const curSeedD2 = dist2(x, y, curSeed.x, curSeed.y);
+            if (closestSeed) {
+                const { d2, index } = closestSeed;
 
-                if (closestSeedD2 > curSeedD2) {
-                    closestSeedIndex = i;
-                    closestSeedD2 = curSeedD2;
+                if (d2 === 0) {
+                    pixels[y][x].r = 255;
+                    pixels[y][x].g = 255;
+                    pixels[y][x].b = 255;
+                } else {
+                    const seedColor = COLORS[index % COLORS.length];
+                    const { r, g, b } = colorToPixel(seedColor);
+
+                    pixels[y][x].r = r;
+                    pixels[y][x].g = g;
+                    pixels[y][x].b = b;
                 }
-            }
-
-            if (closestSeedD2 === 0) {
-                pixels[y][x].r = 255;
-                pixels[y][x].g = 255;
-                pixels[y][x].b = 255;
-            } else {
-                const seedColor = COLORS[closestSeedIndex % COLORS.length];
-                const { r, g, b } = colorToPixel(seedColor);
-
-                pixels[y][x].r = r;
-                pixels[y][x].g = g;
-                pixels[y][x].b = b;
             }
         }
     }
