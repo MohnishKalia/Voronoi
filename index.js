@@ -38,12 +38,22 @@ for (let y = 0; y < HEIGHT; y++) {
  */
 const seeds = [];
 
+/**
+ * @returns {Vec2}
+ */
 function randomPoint() {
     const x = Math.floor(Math.random() * WIDTH);
     const y = Math.floor(Math.random() * HEIGHT);
     return { x, y };
 }
 
+/**
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @returns {number}
+ */
 function dist2(x1, y1, x2, y2) {
     const dx = x2 - x1;
     const dy = y2 - y1;
