@@ -1,8 +1,8 @@
 import { writeFile } from "fs/promises";
 import readline from "readline/promises";
 
-const WIDTH = 800;
-const HEIGHT = 600;
+const WIDTH = 3840;
+const HEIGHT = 2160;
 const COMPONENT_MAX = 255;
 const OUTPUT_FILEPATH = 'output.ppm';
 const COLORS = [
@@ -75,8 +75,8 @@ function colorToPixel(hexString) {
 async function seedSetup() {
     const seedInput = await rl.question('How many seeds for the Voronoi diagram? ');
     const seedCount = parseInt(seedInput.trim());
-    if (isNaN(seedCount) || seedCount < 1) throw new Error("Invalid seed input: exiting...");
     rl.close();
+    if (isNaN(seedCount) || seedCount < 1) throw "Invalid seed input: exiting...";
 
     for (let i = 0; i < seedCount; i++) {
         seeds.push(randomPoint());
